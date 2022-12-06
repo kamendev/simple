@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: simple-pod-dev
+  labels:
+    app: simple-pod-dev
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    namespace: simple-pod-dev
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/kamendev/simple.git
+    targetRevision: main
+    path: ./k8s-resources/nginx-pod/dev
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true

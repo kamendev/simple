@@ -1,1 +1,38 @@
----
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: apache
+spec:
+  selector:
+    matchLabels:
+      app: apache
+  replicas: 1
+  serviceName: apache-server
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      containers:
+      - env:
+        - name: apache_SERVERS
+          value: "1"
+        image: kamendev/simplev2:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - sleep
+        - "infinity"
+        name: apache
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: apache-vol
+      restartPolicy: Always
+  volumeClaimTemplates:
+  - metadata:
+      name: apache-vol
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 4Gi

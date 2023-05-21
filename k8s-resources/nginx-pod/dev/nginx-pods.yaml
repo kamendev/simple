@@ -25,14 +25,9 @@ spec:
         name: nginx
         volumeMounts:
         - mountPath: /var/lib/mysql
-          name: apache-vol
+          name: apache-vol-nginx-0
       restartPolicy: Always
-  volumeClaimTemplates:
-  - metadata:
-      name: apache-vol
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 4.9Gi
+      volumes:
+      - name: apache-vol-nginx-0
+        persistentVolumeClaim:
+          claimName: apache-vol-nginx-0
